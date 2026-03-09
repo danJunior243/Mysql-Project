@@ -554,8 +554,614 @@ GROUP BY p.patientID, p.patientName
 ORDER BY NomDuPatient;
 
 
+
+-- Affiche tous les patients, même ceux sans dossier médical, avec : Le nombre total de dossiers médicaux créés par patient,
+-- Affiche 0 si le patient n'a aucun dossier.
+
+-- (Utiliser LEFT JOIN, COUNT, COALESCE)
+SELECT 
+   p.patientName AS NomDuPatient,
+   COUNT(m.medicalRecordsID) AS NombredeDossiersMedicaux
+FROM Patients AS p
+LEFT JOIN MedicalRecords AS m ON p.patientID = m.patientID
+GROUP BY p.patientID,p.patientName
+ORDER BY NomDuPatient;
+
+
+-- Affiche tous les docteurs, même ceux sans consultation, et indique : "Actif" si le docteur a au moins un rendez-vous "Completed",
+
+-- "Inactif" sinon.
+
+-- (Utiliser LEFT JOIN + CASE + GROUP BY)
+
+
+
+SELECT 
+  COUNT(d.doctorID) AS NombreDesDocteurs,
+  d.doctorName AS NomDuDocteur,
+  CASE 
+            WHEN a.status='Completed' THEN 'Completed' 
+            ELSE 'Inactif'
+         END AS Etat  
+ FROM Doctors AS d
+ LEFT JOIN Appointments AS a ON d.doctorID = a.doctorID
+ GROUP BY d.doctorID
+ ORDER BY d.doctorName;
+ 
+ 
+ -- 8.Affiche tous les docteurs et patients associés aux rendez-vous même s'ils n'ont pas tous un lien.
+-- Docteurs sans patients et patients sans docteurs doivent quand même apparaître. (Utiliser FULL JOIN)
+
+
+
+-- Pour chaque facturation, affiche :
+-- Le nom du patient, Le montant facturé, Et indique "Avec assurance" ou "Sans assurance" selon la valeur de insuranceProvider.
+-- (Utiliser CASE)
+
+SELECT 
+   p.patientName AS nomduPatient,
+   b.Amount AS montantFacturé,
+   CASE 
+      WHEN b.insuranceProvider IS NOT NULL THEN 'Avec assurance'
+      ELSE 'Sans assurance'
+   END AS valeurInsuranceProvider
+FROM Billing AS b
+LEFT JOIN Patients AS p ON b.patientID = p.patientID
+ORDER BY nomduPatient;
+
+
+SELECT *
+FROM Appointments;
+
+-- Pour chaque docteur, affiche : Son nom, Le nombre de patients uniques qu'il a rencontrés (même s'il n'a rencontré personne).
+
+-- (Utiliser LEFT JOIN + COUNT DISTINCT + COALESCE)
+
+SELECT 
+    d.doctorName AS nomduDocteur,
+    COALESCE(COUNT(DISTINCT a.patientID), 0) AS NombrePatientsUniques
+FROM Doctors AS d 
+LEFT JOIN Appointments AS a ON d.doctorID = a.doctorID
+GROUP BY d.doctorID, d.doctorName
+ORDER BY nomduDocteur;
+
+
 SELECT *
 FROM Patients;
+
+-- Affiche le nombre de caractères dans chaque patientName
+SELECT patientName , LENGTH(patientName) AS NameLength FROM Patients;
+
+-- Affiche le nom des docteurs en minuscules
+SELECT doctorName, LOWER(doctorName) AS NomDocteur FROM Doctors;
+
+-- Affiche le nom des patients en majuscules
+SELECT doctorName, UPPER(doctorName) AS NomDocteur FROM Doctors;
+
+-- Affiche les noms de patients avec des espaces supprimés au début et à la fin.
+
+SELECT patientName, TRIM(patientName) AS TrimmedName FROM Patients;
+
+-- Affiche la position du premier espace dans patientName
+SELECT PatientName , POSITION(' ' IN PatientName) AS Position 
+FROM Patients;
+
+-- Affiche uniquement les 5 premiers caractères du nom de chaque patient
+SELECT PatientName, SUBSTRING(PatientName FROM 1 FOR 5) AS ShortName
+FROM Patients; 
+
+-- Affiche uniquement les 3 derniers caractères du nom de chaque patient
+
+
+
+-- Affiche le prénom uniquement des patients
+
+
+-- Affiche le nom du patient sans espaces
+
+SELECT PatientName, REPLACE(PatientName,' ','') AS NewPatientName
+FROM Patients;
+
+
+
+ 
+
+   
+  
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
