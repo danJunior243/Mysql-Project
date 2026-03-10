@@ -611,7 +611,7 @@ ORDER BY nomduPatient;
 
 
 SELECT *
-FROM Appointments;
+FROM Doctors;
 
 -- Pour chaque docteur, affiche : Son nom, Le nombre de patients uniques qu'il a rencontrés (même s'il n'a rencontré personne).
 
@@ -655,12 +655,87 @@ FROM Patients;
 
 
 -- Affiche le prénom uniquement des patients
-
+SELECT PatientName, LEFT(PatientName,LOCATE(' ',PatientName) -1) AS Prenom
+FROM Patients;
 
 -- Affiche le nom du patient sans espaces
 
 SELECT PatientName, REPLACE(PatientName,' ','') AS NewPatientName
 FROM Patients;
+
+-- Trouve tous les patients dont le nom commence par "J"
+SELECT patientName 
+FROM Patients
+WHERE patientName LIKE 'J%';
+
+-- Trouve tous les patients dont le nom se termine par "son"
+SELECT patientName 
+FROM Patients
+WHERE patientName LIKE '%son';
+
+-- Trouve tous les docteurs dont la spécialisation contient "logist".
+SELECT doctorName ,specialization
+FROM Doctors
+WHERE specialization LIKE '%logist%';
+
+-- Trouve toutes les assurances dans Billing contenant le mot Health.
+SELECT insuranceProvider
+FROM Billing
+WHERE insuranceProvider LIKE '%Health%';
+
+-- Affiche une colonne AppointmentInfo sous ce format
+
+SELECT
+    CONCAT(p.patientName,' ', 'with' ,' ',d.DoctorName) AS AppointmentInfo
+FROM Appointments AS a
+INNER JOIN Doctors AS d ON d.doctorID= a.doctorID
+INNER JOIN Patients AS p ON p.patientID = a.patientID
+ORDER BY p.patientName ASC;
+
+-- Affiche une phrase complète :
+
+SELECT
+    CONCAT(p.patientName,' ', 'visited' ,' ',d.DoctorName) AS Sentence
+FROM Appointments AS a
+INNER JOIN Doctors AS d ON d.doctorID= a.doctorID
+INNER JOIN Patients AS p ON p.patientID = a.patientID;
+
+-- Affiche les initiales de chaque patient.
+SELECT 
+    patientName,
+    CONCAT(
+        LEFT(patientName,1),
+        '.',
+        SUBSTRING(patientName, LOCATE(' ', patientName) + 1, 1)
+    ) AS Initiales
+FROM Patients;
+
+-- Remplace le mot Dr. dans doctorName par Doctor
+SELECT doctorName, REPLACE(doctorName,'Dr.','Doctor') AS NewDoctorName
+FROM Doctors;
+
+-- Affiche une colonne PatientInfo sous ce format :
+
+SELECT patientName, CONCAT('Patient:', ' ', patientName) AS PatientInfo
+FROM Patients;
+ 
+-- Affiche une colonne DoctorDepartment sous ce format
+
+ SELECT doctorName, CONCAT(doctorName, ' - ', department) AS DoctorDepartment
+FROM Doctors;
+
+
+
+
+   
+
+
+
+
+
+
+
+
 
 
 
