@@ -611,7 +611,7 @@ ORDER BY nomduPatient;
 
 
 SELECT *
-FROM Doctors;
+FROM Billing;
 
 -- Pour chaque docteur, affiche : Son nom, Le nombre de patients uniques qu'il a rencontrés (même s'il n'a rencontré personne).
 
@@ -628,6 +628,13 @@ ORDER BY nomduDocteur;
 
 SELECT *
 FROM Patients;
+
+/*  
+------------------------------------------------
+        Fonctions textes
+------------------------------------------------        
+
+*/
 
 -- Affiche le nombre de caractères dans chaque patientName
 SELECT patientName , LENGTH(patientName) AS NameLength FROM Patients;
@@ -723,6 +730,53 @@ FROM Patients;
 
  SELECT doctorName, CONCAT(doctorName, ' - ', department) AS DoctorDepartment
 FROM Doctors;
+
+/*  
+------------------------------------------------
+        Fonctions numériques 
+------------------------------------------------        
+
+*/
+-- Affiche le montant des factures arrondi à l’entier le plus proche
+
+SELECT Amount,CEIL(Amount) AS AmountResult
+FROM Billing;
+
+-- Affiche le montant des factures arrondi à 2 décimales.
+
+SELECT Amount,ROUND(Amount,2) AS AmountResult
+FROM Billing;
+
+-- Affiche l’âge maximum parmi tous les patients.
+
+SELECT patientName,MAX(Age)
+FROM Patients;
+
+-- Affiche le montant (amount) de chaque facture et crée une colonne DoubleAmount qui multiplie le montant par 2
+
+SELECT Amount,Amount * 2 AS DoubleAmount
+FROM Billing;
+
+-- Affiche l’âge de chaque patient et crée une colonne AgePlusFive qui ajoute 5 ans à chaque âge
+
+SELECT patientName,age, age+5 AS AgePlusFive
+FROM Patients;
+
+-- Affiche l’âge minimum des patients
+SELECT patientName, MIN(age) AS AgeMinimumPatients
+FROM Patients;
+
+-- Calcule la moyenne des âges des patients.
+
+SELECT ROUND(AVG(age),2) AS AgeMoyenPatients
+FROM Patients;
+
+-- Calcule la somme totale des factures dans la table Billing
+
+SELECT SUM(Amount) AS sommeTotale
+FROM Billing;
+
+
 
 
 
